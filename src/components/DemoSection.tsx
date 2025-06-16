@@ -97,7 +97,7 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                 <div className="text-sm text-gray-600">Fiabilité</div>
               </div>
               <div className="p-4 bg-white rounded-lg shadow">
-                <div className="text-2xl font-bold text-blue-900">< 2s</div>
+                <div className="text-2xl font-bold text-blue-900">&lt; 2s</div>
                 <div className="text-sm text-gray-600">Vérification</div>
               </div>
               <div className="p-4 bg-white rounded-lg shadow">
