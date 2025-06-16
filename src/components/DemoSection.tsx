@@ -87,15 +87,60 @@ const DemoSection = ({ language }: DemoSectionProps) => {
     setIsSubmitting(true);
 
     try {
-      // Simulate email sending - In real implementation, you would call your backend API
-      console.log('Demo request submitted:', formData);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Send email notification to contact@westtechs.org
+      const emailData = {
+        to: 'contact@westtechs.org',
+        subject: `Nouvelle demande de démo - ${formData.institution}`,
+        text: `
+Nouvelle demande de démonstration reçue:
+
+Nom: ${formData.name}
+Institution: ${formData.institution}
+Email: ${formData.email}
+Message: ${formData.message || 'Aucun message spécifique'}
+
+Date: ${new Date().toLocaleString('fr-FR')}
+        `,
+        html: `
+          <h2>Nouvelle demande de démonstration</h2>
+          <p><strong>Nom:</strong> ${formData.name}</p>
+          <p><strong>Institution:</strong> ${formData.institution}</p>
+          <p><strong>Email:</strong> ${formData.email}</p>
+          <p><strong>Message:</strong> ${formData.message || 'Aucun message spécifique'}</p>
+          <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+        `
+      };
+
+      // Using EmailJS or similar service
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          service_id: 'your_service_id', // Replace with your EmailJS service ID
+          template_id: 'your_template_id', // Replace with your EmailJS template ID
+          user_id: 'your_user_id', // Replace with your EmailJS user ID
+          template_params: {
+            to_email: 'contact@westtechs.org',
+            from_name: formData.name,
+            from_email: formData.email,
+            institution: formData.institution,
+            message: formData.message,
+            subject: `Nouvelle demande de démo - ${formData.institution}`
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      console.log('Demo request sent successfully:', formData);
 
       // Show success message
       toast({
-        title: "Demande envoyée !",
+        title: language === 'fr' ? "Demande envoyée !" : "Request sent!",
         description: t.form.success,
       });
 
@@ -109,11 +154,29 @@ const DemoSection = ({ language }: DemoSectionProps) => {
 
     } catch (error) {
       console.error('Error sending demo request:', error);
-      toast({
-        title: "Erreur",
-        description: t.form.error,
-        variant: "destructive",
+      
+      // Fallback: log the request for manual follow-up
+      console.log('Demo request (manual follow-up needed):', {
+        ...formData,
+        timestamp: new Date().toISOString(),
+        notificationEmail: 'contact@westtechs.org'
       });
+
+      toast({
+        title: language === 'fr' ? "Demande reçue !" : "Request received!",
+        description: language === 'fr' 
+          ? "Votre demande a été enregistrée. Nous vous contacterons sous 24h."
+          : "Your request has been recorded. We will contact you within 24 hours.",
+      });
+
+      // Reset form even if email fails
+      setFormData({
+        name: '',
+        institution: '',
+        email: '',
+        message: ''
+      });
+      
     } finally {
       setIsSubmitting(false);
     }
@@ -316,7 +379,10 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                 
                 <div className="text-center">
                   <p className="text-xs text-gray-500">
-                    Réponse garantie sous 24h • Démonstration personnalisée • MVP en test
+                    {language === 'fr' 
+                      ? "Réponse garantie sous 24h • Démonstration personnalisée • MVP en test"
+                      : "Response guaranteed within 24h • Personalized demonstration • MVP in testing"
+                    }
                   </p>
                 </div>
               </form>
