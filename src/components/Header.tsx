@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 interface HeaderProps {
@@ -17,13 +17,15 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
       home: 'Accueil',
       about: 'À propos',
       contact: 'Contact',
-      demo: 'Demander une démo'
+      demo: 'Demander une démo',
+      login: 'Connexion'
     },
     en: {
       home: 'Home',
       about: 'About',
       contact: 'Contact',
-      demo: 'Request Demo'
+      demo: 'Request Demo',
+      login: 'Login'
     }
   };
 
@@ -88,6 +90,14 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
                 EN
               </button>
             </div>
+
+            {/* Login Button */}
+            <NavLink to="/login">
+              <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white">
+                <User className="mr-2" size={16} />
+                {t.login}
+              </Button>
+            </NavLink>
             
             <Button className="bg-blue-900 hover:bg-blue-800 text-white">
               {t.demo}
@@ -134,6 +144,12 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
                   EN
                 </button>
               </div>
+              <NavLink to="/login">
+                <Button variant="outline" className="border-blue-900 text-blue-900 w-fit">
+                  <User className="mr-2" size={16} />
+                  {t.login}
+                </Button>
+              </NavLink>
               <Button className="bg-blue-900 hover:bg-blue-800 text-white w-fit">
                 {t.demo}
               </Button>
