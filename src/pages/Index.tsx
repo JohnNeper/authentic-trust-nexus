@@ -1,12 +1,25 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import HeroSection from '@/components/HeroSection';
+import FeaturesSection from '@/components/FeaturesSection';
+import DemoSection from '@/components/DemoSection';
+import MissionSection from '@/components/MissionSection';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 const Index = () => {
+  const [language, setLanguage] = useState<'fr' | 'en'>('fr');
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Header language={language} onLanguageChange={setLanguage} />
+      <HeroSection language={language} />
+      <FeaturesSection language={language} />
+      <DemoSection language={language} />
+      <MissionSection language={language} />
+      <TestimonialsSection language={language} />
+      <Footer language={language} />
     </div>
   );
 };
