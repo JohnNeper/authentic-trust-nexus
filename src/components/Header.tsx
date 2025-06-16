@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, CheckCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 interface HeaderProps {
@@ -17,6 +17,7 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
       home: 'Accueil',
       about: 'À propos',
       contact: 'Contact',
+      verification: 'Vérification',
       demo: 'Demander une démo',
       login: 'Connexion'
     },
@@ -24,6 +25,7 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
       home: 'Home',
       about: 'About',
       contact: 'Contact',
+      verification: 'Verification',
       demo: 'Request Demo',
       login: 'Login'
     }
@@ -69,6 +71,15 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
               }
             >
               {t.contact}
+            </NavLink>
+            <NavLink 
+              to="/verification" 
+              className={({ isActive }) => 
+                `font-medium transition-colors flex items-center ${isActive ? 'text-blue-900' : 'text-gray-700 hover:text-blue-900'}`
+              }
+            >
+              <CheckCircle className="mr-1" size={16} />
+              {t.verification}
             </NavLink>
             
             {/* Language Toggle */}
@@ -125,6 +136,10 @@ const Header = ({ language, onLanguageChange }: HeaderProps) => {
               </NavLink>
               <NavLink to="/contact" className="font-medium text-gray-700 hover:text-blue-900">
                 {t.contact}
+              </NavLink>
+              <NavLink to="/verification" className="font-medium text-gray-700 hover:text-blue-900 flex items-center">
+                <CheckCircle className="mr-2" size={16} />
+                {t.verification}
               </NavLink>
               <div className="flex items-center space-x-2">
                 <button
