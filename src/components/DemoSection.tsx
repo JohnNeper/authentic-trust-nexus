@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Play, Shield, Award, Lock } from 'lucide-react';
+import { Play, Shield, Award, Lock, Send, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface DemoSectionProps {
   language: 'fr' | 'en';
@@ -16,68 +17,106 @@ const DemoSection = ({ language }: DemoSectionProps) => {
     email: '',
     message: ''
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const { toast } = useToast();
 
   const content = {
     fr: {
-      title: 'Essayez Authentic dans votre institution',
+      title: 'Testez Authentic dans votre institution',
       subtitle: 'Nous accompagnons les administrations et organisations dans l\'intégration de notre technologie certifiée. Demandez une démonstration personnalisée dès aujourd\'hui.',
-      videoTitle: 'Processus de Signature & Vérification',
-      videoSubtitle: 'Découvrez comment nos certificats électroniques valides sécurisent vos documents',
-      loginTitle: 'Déjà client ?',
+      videoTitle: 'Processus de Signature & Vérification IA',
+      videoSubtitle: 'Découvrez comment nos certificats électroniques valides et notre IA sécurisent vos documents',
+      loginTitle: 'Déjà partenaire ?',
       loginSubtitle: 'Accédez à votre espace institution',
       loginButton: 'Se connecter',
       certificationNote: '✓ Certificats électroniques conformes aux standards internationaux (X.509)',
-      securityNote: '✓ Infrastructure PKI certifiée et audit de sécurité',
-      complianceNote: '✓ Conforme aux réglementations eIDAS et ANSSI',
+      securityNote: '✓ Infrastructure PKI certifiée et cryptographie avancée',
+      complianceNote: '✓ Conforme aux réglementations eIDAS et intelligence artificielle intégrée',
       form: {
-        name: 'Nom complet',
-        institution: 'Institution / Organisation',
-        email: 'Adresse email professionnelle',
-        message: 'Décrivez vos besoins (optionnel)',
-        submit: 'Demander une démo gratuite'
+        name: 'Nom complet *',
+        institution: 'Institution / Organisation *',
+        email: 'Adresse email professionnelle *',
+        message: 'Décrivez vos besoins et cas d\'usage (optionnel)',
+        submit: 'Envoyer la demande de démo',
+        submitting: 'Envoi en cours...',
+        success: 'Votre demande a été envoyée avec succès ! Nous vous contacterons sous 24h.',
+        error: 'Erreur lors de l\'envoi. Veuillez réessayer.'
       },
       stats: {
-        reliability: 'Fiabilité',
+        reliability: 'Précision IA',
         verification: 'Vérification',
-        institutions: 'Institutions',
-        certificates: 'Certificats délivrés'
+        institutions: 'Institution MVP',
+        certificates: 'Documents testés'
       }
     },
     en: {
-      title: 'Try Authentic in your institution',
+      title: 'Test Authentic in your institution',
       subtitle: 'We support administrations and organizations in integrating our certified technology. Request a personalized demonstration today.',
-      videoTitle: 'Signature & Verification Process',
-      videoSubtitle: 'Discover how our valid electronic certificates secure your documents',
-      loginTitle: 'Already a client?',
+      videoTitle: 'AI Signature & Verification Process',
+      videoSubtitle: 'Discover how our valid electronic certificates and AI secure your documents',
+      loginTitle: 'Already a partner?',
       loginSubtitle: 'Access your institution space',
       loginButton: 'Sign In',
       certificationNote: '✓ Electronic certificates compliant with international standards (X.509)',
-      securityNote: '✓ Certified PKI infrastructure and security audit',
-      complianceNote: '✓ Compliant with eIDAS and ANSSI regulations',
+      securityNote: '✓ Certified PKI infrastructure and advanced cryptography',
+      complianceNote: '✓ Compliant with eIDAS regulations and integrated artificial intelligence',
       form: {
-        name: 'Full Name',
-        institution: 'Institution / Organization',
-        email: 'Professional Email Address',
-        message: 'Describe your needs (optional)',
-        submit: 'Request Free Demo'
+        name: 'Full Name *',
+        institution: 'Institution / Organization *',
+        email: 'Professional Email Address *',
+        message: 'Describe your needs and use cases (optional)',
+        submit: 'Send Demo Request',
+        submitting: 'Sending...',
+        success: 'Your request has been sent successfully! We will contact you within 24 hours.',
+        error: 'Error sending request. Please try again.'
       },
       stats: {
-        reliability: 'Reliability',
+        reliability: 'AI Accuracy',
         verification: 'Verification',
-        institutions: 'Institutions',
-        certificates: 'Certificates Issued'
+        institutions: 'MVP Institution',
+        certificates: 'Documents Tested'
       }
     }
   };
 
   const t = content[language];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Demo request submitted:', formData);
-    // Here you would typically send the data to your backend
+    setIsSubmitting(true);
+
+    try {
+      // Simulate email sending - In real implementation, you would call your backend API
+      console.log('Demo request submitted:', formData);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Show success message
+      toast({
+        title: "Demande envoyée !",
+        description: t.form.success,
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        institution: '',
+        email: '',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Error sending demo request:', error);
+      toast({
+        title: "Erreur",
+        description: t.form.error,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -89,7 +128,7 @@ const DemoSection = ({ language }: DemoSectionProps) => {
 
   const handleLoginClick = () => {
     console.log('Redirect to institution login');
-    // Here you would redirect to the login page
+    window.location.href = '/login';
   };
 
   return (
@@ -132,14 +171,16 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                       <Play className="text-white ml-1" size={32} />
                     </div>
                     <div className="space-y-2">
-                      <p className="text-white text-lg font-medium">Voir le processus en action</p>
-                      <p className="text-blue-100 text-sm">Durée: 3 minutes</p>
+                      <p className="text-white text-lg font-medium">Voir le processus IA en action</p>
+                      <p className="text-blue-100 text-sm">Durée: 3 minutes • Démonstration complète</p>
                     </div>
                   </div>
                   {/* Overlay with document animation preview */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-indigo-900/20">
                     <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white/80 text-xs">
                       <span>📄 Document</span>
+                      <span>→</span>
+                      <span>🤖 IA Analyse</span>
                       <span>→</span>
                       <span>🔐 Signature</span>
                       <span>→</span>
@@ -161,7 +202,7 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                     <div className="text-white text-center p-8">
                       <p className="mb-4">Votre navigateur ne supporte pas la lecture vidéo.</p>
                       <p className="text-sm text-blue-200">
-                        Cette démonstration montre le processus complet de signature électronique et de vérification avec Authentic.
+                        Cette démonstration montre le processus complet de signature électronique avec IA et de vérification avec Authentic.
                       </p>
                     </div>
                   </video>
@@ -180,11 +221,11 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                 <div className="text-sm text-gray-600">{t.stats.verification}</div>
               </div>
               <div className="p-4 bg-white rounded-lg shadow border border-blue-100">
-                <div className="text-2xl font-bold text-blue-900">150+</div>
+                <div className="text-2xl font-bold text-blue-900">1</div>
                 <div className="text-sm text-gray-600">{t.stats.institutions}</div>
               </div>
               <div className="p-4 bg-white rounded-lg shadow border border-blue-100">
-                <div className="text-2xl font-bold text-blue-900">2M+</div>
+                <div className="text-2xl font-bold text-blue-900">500+</div>
                 <div className="text-sm text-gray-600">{t.stats.certificates}</div>
               </div>
             </div>
@@ -257,14 +298,25 @@ const DemoSection = ({ language }: DemoSectionProps) => {
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-blue-900 hover:bg-blue-800 text-white py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-900 hover:bg-blue-800 text-white py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center space-x-2"
                 >
-                  {t.form.submit}
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>{t.form.submitting}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={20} />
+                      <span>{t.form.submit}</span>
+                    </>
+                  )}
                 </Button>
                 
                 <div className="text-center">
                   <p className="text-xs text-gray-500">
-                    Réponse garantie sous 24h • Démonstration personnalisée
+                    Réponse garantie sous 24h • Démonstration personnalisée • MVP en test
                   </p>
                 </div>
               </form>
