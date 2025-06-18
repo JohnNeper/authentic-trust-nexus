@@ -16,6 +16,10 @@ const Dashboard: React.FC = () => {
   const [language, setLanguage] = useState<'fr' | 'en'>('fr');
   const [activeView, setActiveView] = useState<ActiveView>('home');
 
+  const handleViewChange = (view: string) => {
+    setActiveView(view as ActiveView);
+  };
+
   const renderActiveView = () => {
     switch (activeView) {
       case 'home':
@@ -41,7 +45,7 @@ const Dashboard: React.FC = () => {
         <AppSidebar 
           language={language} 
           activeView={activeView} 
-          onViewChange={setActiveView} 
+          onViewChange={handleViewChange} 
         />
         <SidebarInset className="flex-1">
           <DashboardHeader 
