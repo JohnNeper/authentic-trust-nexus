@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -227,7 +226,7 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({ language }) => {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="list">{t.tabs.list}</TabsTrigger>
           <TabsTrigger value="editor">{t.tabs.editor}</TabsTrigger>
-          <TabsTrigger value="preview">{t.tabs.preview}</Tab>
+          <TabsTrigger value="preview">{t.tabs.preview}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="space-y-4">
